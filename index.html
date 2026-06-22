@@ -1,127 +1,238 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Aga Tech - OS</title>
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<title>Aga Tech</title>
 
 <style>
+
 body{
-font-family: Arial;
-background:#f4f6fb;
-padding:20px;
+margin:0;
+font-family:Arial;
+background:#F5F7FB;
+}
+
+.topo{
+
+background:#1E40FF;
+
+padding:30px;
+
+text-align:center;
+
+color:white;
+
+}
+
+.logo{
+
+width:140px;
+
+margin-bottom:15px;
+
 }
 
 .container{
-max-width:800px;
-margin:auto;
-background:white;
+
+max-width:850px;
+
+margin:30px auto;
+
 padding:20px;
-border-radius:15px;
-}
 
-h1{
-text-align:center;
-}
-
-input, textarea, select{
-width:100%;
-padding:10px;
-margin:8px 0;
-border-radius:8px;
-border:1px solid #ccc;
-}
-
-button{
-width:100%;
-padding:12px;
-background:#1E40FF;
-color:white;
-border:none;
-border-radius:10px;
-font-size:16px;
-cursor:pointer;
 }
 
 .card{
-border:1px solid #ddd;
-padding:10px;
-margin-top:10px;
-border-radius:10px;
+
+background:white;
+
+padding:25px;
+
+border-radius:20px;
+
+box-shadow:
+0 10px 25px
+rgba(0,0,0,.08);
+
 }
+
+input,
+textarea{
+
+width:100%;
+
+padding:14px;
+
+margin-top:10px;
+
+margin-bottom:14px;
+
+border-radius:10px;
+
+border:1px solid #ddd;
+
+}
+
+button{
+
+width:100%;
+
+padding:15px;
+
+border:none;
+
+border-radius:12px;
+
+background:#1E40FF;
+
+color:white;
+
+font-size:18px;
+
+cursor:pointer;
+
+}
+
+.os{
+
+margin-top:20px;
+
+}
+
+.item{
+
+background:#f6f6f6;
+
+padding:14px;
+
+margin-top:10px;
+
+border-radius:12px;
+
+}
+
 </style>
+
 </head>
 
 <body>
 
+<div class="topo">
+
+<img
+src="logo.png"
+class="logo">
+
+<h1>AGA TECH</h1>
+
+</div>
+
 <div class="container">
 
-<h1>AGA TECH - Ordem de Serviço</h1>
+<div class="card">
 
-<input id="cliente" placeholder="Nome do cliente">
-<input id="telefone" placeholder="Telefone">
-<input id="modelo" placeholder="Modelo do celular">
-<input id="imei" placeholder="IMEI">
+<input
+id="cliente"
+placeholder="Cliente">
 
-<textarea id="defeito" placeholder="Defeito relatado"></textarea>
+<input
+id="modelo"
+placeholder="Modelo">
 
-<select id="status">
-<option>Em análise</option>
-<option>Em reparo</option>
-<option>Pronto</option>
-<option>Entregue</option>
-</select>
+<textarea
+id="defeito"
+placeholder="Defeito">
+</textarea>
 
-<button onclick="salvar()">Salvar OS</button>
+<button
+onclick="salvar()">
 
-<h2>OS Criadas</h2>
-<div id="lista"></div>
+Salvar OS
+
+</button>
+
+<div
+class="os"
+id="lista">
+</div>
+
+</div>
 
 </div>
 
 <script>
 
-const API = "http://localhost:3000";
+let lista=[];
 
-async function salvar(){
+function salvar(){
 
-await fetch(API+"/os",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-cliente:cliente.value,
-telefone:telefone.value,
-modelo:modelo.value,
-imei:imei.value,
-defeito:defeito.value,
-status:status.value
-})
+lista.unshift({
+
+cliente:
+cliente.value,
+
+modelo:
+modelo.value,
+
+defeito:
+defeito.value,
+
+numero:
+Date.now()
+
 });
 
-alert("OS salva!");
-load();
+render();
+
 }
 
-async function load(){
+function render(){
 
-const res = await fetch(API+"/os");
-const data = await res.json();
+document
+.getElementById("lista")
+.innerHTML=
 
-lista.innerHTML = data.map(os => `
-<div class="card">
-<b>${os.os_numero}</b><br>
-${os.cliente} - ${os.modelo}<br>
-Status: ${os.status}
+lista.map(x=>
+
+`
+
+<div class=item>
+
+<b>
+
+OS ${x.numero}
+
+</b>
+
+<br>
+
+${x.cliente}
+
+<br>
+
+${x.modelo}
+
+<br>
+
+${x.defeito}
+
 </div>
-`).join("");
+
+`
+
+).join("");
 
 }
-
-load();
 
 </script>
 
 </body>
+
 </html>
