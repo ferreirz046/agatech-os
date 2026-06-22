@@ -2,27 +2,34 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Aga Tech OS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aga Tech - OS</title>
 
 <style>
 body{
-font-family:Arial;
+font-family: Arial;
 background:#f4f6fb;
 padding:20px;
 }
 
 .container{
-max-width:700px;
+max-width:800px;
 margin:auto;
 background:white;
 padding:20px;
 border-radius:15px;
 }
 
-input,textarea,select{
+h1{
+text-align:center;
+}
+
+input, textarea, select{
 width:100%;
 padding:10px;
 margin:8px 0;
+border-radius:8px;
+border:1px solid #ccc;
 }
 
 button{
@@ -32,6 +39,7 @@ background:#1E40FF;
 color:white;
 border:none;
 border-radius:10px;
+font-size:16px;
 cursor:pointer;
 }
 
@@ -48,14 +56,14 @@ border-radius:10px;
 
 <div class="container">
 
-<h1>Aga Tech - OS</h1>
+<h1>AGA TECH - Ordem de Serviço</h1>
 
-<input id="cliente" placeholder="Cliente">
+<input id="cliente" placeholder="Nome do cliente">
 <input id="telefone" placeholder="Telefone">
-<input id="modelo" placeholder="Modelo">
+<input id="modelo" placeholder="Modelo do celular">
 <input id="imei" placeholder="IMEI">
 
-<textarea id="defeito" placeholder="Defeito"></textarea>
+<textarea id="defeito" placeholder="Defeito relatado"></textarea>
 
 <select id="status">
 <option>Em análise</option>
@@ -66,7 +74,7 @@ border-radius:10px;
 
 <button onclick="salvar()">Salvar OS</button>
 
-<h2>Ordens</h2>
+<h2>OS Criadas</h2>
 <div id="lista"></div>
 
 </div>
@@ -79,7 +87,9 @@ async function salvar(){
 
 await fetch(API+"/os",{
 method:"POST",
-headers:{"Content-Type":"application/json"},
+headers:{
+"Content-Type":"application/json"
+},
 body:JSON.stringify({
 cliente:cliente.value,
 telefone:telefone.value,
@@ -90,6 +100,7 @@ status:status.value
 })
 });
 
+alert("OS salva!");
 load();
 }
 
@@ -98,12 +109,11 @@ async function load(){
 const res = await fetch(API+"/os");
 const data = await res.json();
 
-lista.innerHTML = data.map(o=>`
+lista.innerHTML = data.map(os => `
 <div class="card">
-<b>${o.os_numero}</b><br>
-${o.cliente}<br>
-${o.modelo}<br>
-Status: ${o.status}
+<b>${os.os_numero}</b><br>
+${os.cliente} - ${os.modelo}<br>
+Status: ${os.status}
 </div>
 `).join("");
 
