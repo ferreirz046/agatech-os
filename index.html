@@ -169,9 +169,28 @@ id="lista">
 
 <script>
 
-let lista=[];
+let lista =
+JSON.parse(
+localStorage.getItem(
+"aga_os"
+)
+) || [];
+
+render();
 
 function salvar(){
+
+if(
+!cliente.value
+){
+
+alert(
+"Preencha o cliente"
+);
+
+return;
+
+}
 
 lista.unshift({
 
@@ -189,6 +208,32 @@ Date.now()
 
 });
 
+localStorage.setItem(
+"aga_os",
+JSON.stringify(lista)
+);
+
+cliente.value="";
+modelo.value="";
+defeito.value="";
+
+render();
+
+}
+
+function excluir(id){
+
+lista=
+lista.filter(
+x=>
+x.numero!==id
+);
+
+localStorage.setItem(
+"aga_os",
+JSON.stringify(lista)
+);
+
 render();
 
 }
@@ -196,32 +241,49 @@ render();
 function render(){
 
 document
-.getElementById("lista")
+.getElementById(
+"lista"
+)
 .innerHTML=
 
-lista.map(x=>
+lista.map(
+x=>
 
 `
 
 <div class=item>
 
 <b>
-
 OS ${x.numero}
-
 </b>
 
-<br>
+<br><br>
 
+Cliente:
 ${x.cliente}
 
 <br>
 
+Modelo:
 ${x.modelo}
 
 <br>
 
+Defeito:
 ${x.defeito}
+
+<br><br>
+
+<button
+onclick="
+excluir(
+${x.numero}
+)
+">
+
+Excluir
+
+</button>
 
 </div>
 
