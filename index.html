@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Aga Tech OS</title>
+
+<style>
+body{
+font-family:Arial;
+background:#f4f6fb;
+padding:20px;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+background:white;
+padding:20px;
+border-radius:15px;
+}
+
+input,textarea,select{
+width:100%;
+padding:10px;
+margin:8px 0;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#1E40FF;
+color:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
+}
+
+.card{
+border:1px solid #ddd;
+padding:10px;
+margin-top:10px;
+border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Aga Tech - OS</h1>
+
+<input id="cliente" placeholder="Cliente">
+<input id="telefone" placeholder="Telefone">
+<input id="modelo" placeholder="Modelo">
+<input id="imei" placeholder="IMEI">
+
+<textarea id="defeito" placeholder="Defeito"></textarea>
+
+<select id="status">
+<option>Em análise</option>
+<option>Em reparo</option>
+<option>Pronto</option>
+<option>Entregue</option>
+</select>
+
+<button onclick="salvar()">Salvar OS</button>
+
+<h2>Ordens</h2>
+<div id="lista"></div>
+
+</div>
+
+<script>
+
+const API = "http://localhost:3000";
+
+async function salvar(){
+
+await fetch(API+"/os",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+cliente:cliente.value,
+telefone:telefone.value,
+modelo:modelo.value,
+imei:imei.value,
+defeito:defeito.value,
+status:status.value
+})
+});
+
+load();
+}
+
+async function load(){
+
+const res = await fetch(API+"/os");
+const data = await res.json();
+
+lista.innerHTML = data.map(o=>`
+<div class="card">
+<b>${o.os_numero}</b><br>
+${o.cliente}<br>
+${o.modelo}<br>
+Status: ${o.status}
+</div>
+`).join("");
+
+}
+
+load();
+
+</script>
+
+</body>
+</html>
