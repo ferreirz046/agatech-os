@@ -27,6 +27,8 @@ app.get("/os",(req,res)=>{
 res.json(osList);
 });
 
-app.listen(3000,()=>{
-console.log("rodando");
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+console.log("rodando na porta " + PORT);
 });
